@@ -89,45 +89,25 @@ class VentaController extends Controller
     return view('ventas.edit', compact('venta', 'productos'));
     }
     public function update(Request $request, $id)
-    {
+{
+    // Validar los datos
     $request->validate([
-        'dni' => 'required|numeric',
-        'nombre_cliente' => 'required|string',
-        'apellido_cliente' => 'required|string',
-        'producto_id' => 'required|array',
-        'cantidad' => 'required|array',
+        'producto_id' => 'required|exists:productos,id',
+        'cantidad' => 'required|integer|min:1',
+        'total' => 'required|numeric|min:0',
     ]);
 
     // Obtener la venta
     $venta = Venta::findOrFail($id);
+    
+    // Actualizar la venta con los nuevos datos
+    $venta->productos()->sync([$request->producto_id => ['cantidad' => $request->cantidad]]);
+    $venta->total = $request->total;
+    $venta->save();
 
-    // Actualizar los datos de la venta
-    $venta->update([
-        'dni' => $request->dni,
-        'nombre_cliente' => $request->nombre_cliente,
-        'apellido_cliente' => $request->apellido_cliente,
-    ]);
+    return redirect()->route('ventas.index')->with('success', 'Venta actualizada con éxito');
+}
 
-    // Actualizar los productos de la venta
-    $productos = [];
-    $total = 0;
-    foreach ($request->producto_id as $index => $productoId) {
-        $producto = Producto::findOrFail($productoId);
-        $cantidad = $request->cantidad[$index];
-        $subtotal = $producto->precio * $cantidad;
-        $productos[$productoId] = ['cantidad' => $cantidad, 'subtotal' => $subtotal];
-        $total += $subtotal;
-    }
-
-    // Actualizar la relación de productos con la venta
-    $venta->productos()->sync($productos);
-
-    // Actualizar el total de la venta
-    $venta->update(['total' => $total]);
-
-    // Redirigir al índice con un mensaje de éxito
-    return redirect()->route('ventas.index')->with('success', 'Venta actualizada correctamente');
-    }
     public function destroy($id)
     {
     // Buscar y eliminar la venta
