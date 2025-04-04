@@ -1,0 +1,56 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+}
+
+.navbar {
+    background-color: #004085 !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-header {
+    background-color: #6f42c1; /* Color morado */
+    color: white;
+    font-weight: bold;
+}
+
+.card-body {
+    background-color: #ffffff;
+}
+
+.btn-outline-primary {
+    font-size: 1.1rem;
+    border-radius: 25px;
+}
+
+.display-3 {
+    color: #004085;
+}
+
+.lead {
+    color: #555;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+/* Estilo personalizado para el color morado */
+.bg-purple {
+    background-color: #6f42c1 !important; /* Morado */
+}
+
+.btn-purple {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #5a2c99; /* Morado más oscuro para el hover */
+    border-color: #5a2c99;
+}
