@@ -1,0 +1,45 @@
+/* app.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+}
+
+.navbar {
+    background-color: #004085 !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-header {
+    background-color: #007bff; /* Color predeterminado */
+    color: white;
+    font-weight: bold;
+}
+
+.card-body {
+    background-color: #ffffff;
+}
+
+.btn-outline-primary {
+    font-size: 1.1rem;
+    border-radius: 25px;
+}
+
+/* Estilos de contenido general */
+.display-3 {
+    color: #004085;
+}
+
+.lead {
+    color: #555;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+/* Y aquí podrían ir otros estilos generales como márgenes, tamaños de fuentes, etc. */
