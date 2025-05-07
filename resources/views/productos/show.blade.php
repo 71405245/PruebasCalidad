@@ -23,7 +23,7 @@
         </div>
 
         <div class="row">
-            <!-- Columna de imágenes -->
+            <!-- Columna de imágenes  -->
             <div class="col-md-5">
                 <div class="card mb-4">
                     <div class="card-body text-center">
