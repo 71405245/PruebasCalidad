@@ -14,37 +14,37 @@ class ProductoController extends Controller
     {
         // Iniciar consulta
         $query = Producto::with(['categoria', 'marca'])
-                    ->latest();
-        
+            ->latest();
+
         // Aplicar filtros
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nombre', 'like', "%{$search}%")
-                  ->orWhere('sku', 'like', "%{$search}%")
-                  ->orWhere('descripcion', 'like', "%{$search}%");
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('descripcion', 'like', "%{$search}%");
             });
         }
-        
+
         if ($request->filled('categoria')) {
             $query->where('categoria_id', $request->input('categoria'));
         }
-        
+
         if ($request->filled('marca')) {
             $query->where('marca_id', $request->input('marca'));
         }
-        
+
         if ($request->filled('genero')) {
             $query->where('genero', $request->input('genero'));
         }
-        
+
         // Obtener productos paginados
         $productos = $query->paginate(10);
-        
+
         // Obtener categorías y marcas para los filtros
         $categorias = Categoria::orderBy('nombre')->get();
         $marcas = Marca::orderBy('nombre')->get();
-        
+
         return view('productos.index', compact('productos', 'categorias', 'marcas'));
     }
 
@@ -55,7 +55,7 @@ class ProductoController extends Controller
         $tallas = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         $colores = ['Blanco', 'Negro', 'Rojo', 'Azul', 'Verde', 'Amarillo', 'Rosa', 'Gris'];
         $generos = ['Masculino', 'Femenino', 'Unisex'];
-        
+
         return view('productos.create', compact('categorias', 'marcas', 'tallas', 'colores', 'generos'));
     }
 
@@ -103,7 +103,7 @@ class ProductoController extends Controller
         Producto::create($validated);
 
         return redirect()->route('productos.index')
-                         ->with('success', 'Producto creado exitosamente');
+            ->with('success', 'Producto creado exitosamente');
     }
 
     public function show($id)
@@ -120,7 +120,7 @@ class ProductoController extends Controller
         $tallas = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
         $colores = ['Blanco', 'Negro', 'Rojo', 'Azul', 'Verde', 'Amarillo', 'Rosa', 'Gris'];
         $generos = ['Masculino', 'Femenino', 'Unisex'];
-        
+
         return view('productos.edit', compact('producto', 'categorias', 'marcas', 'tallas', 'colores', 'generos'));
     }
 
@@ -134,8 +134,8 @@ class ProductoController extends Controller
             'precio' => 'required|numeric|min:0',
             'precio_descuento' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'sku' => 'nullable|string|unique:productos,sku,'.$producto->id,
-            'codigo_barras' => 'nullable|string|unique:productos,codigo_barras,'.$producto->id,
+            'sku' => 'nullable|string|unique:productos,sku,' . $producto->id,
+            'codigo_barras' => 'nullable|string|unique:productos,codigo_barras,' . $producto->id,
             'marca_id' => 'required|exists:marcas,id',
             'categoria_id' => 'required|exists:categorias,id',
             'talla' => 'required|string',
@@ -153,53 +153,76 @@ class ProductoController extends Controller
 
         // Procesar imagen principal si se actualiza
         if ($request->hasFile('imagen_principal')) {
-            // Eliminar imagen anterior si existe
             if ($producto->imagen_principal) {
                 Storage::disk('public')->delete($producto->imagen_principal);
             }
-            $validated['imagen_principal'] = $request->file('imagen_principal')->store('productos', 'public');
+            $validated['imagen_principal'] = $request->file('imagen_principal')->store('productos/main', 'public');
         }
 
         // Procesar imágenes adicionales si se actualizan
         if ($request->hasFile('imagenes_adicionales')) {
-            // Eliminar imágenes anteriores si existen
+            // Convertir imágenes existentes a array si es necesario
+            $imagenesExistentes = [];
             if ($producto->imagenes_adicionales) {
-                foreach ($producto->imagenes_adicionales as $oldImage) {
-                    Storage::disk('public')->delete($oldImage);
+                $imagenesExistentes = is_string($producto->imagenes_adicionales)
+                    ? json_decode($producto->imagenes_adicionales, true)
+                    : $producto->imagenes_adicionales;
+
+                // Eliminar imágenes anteriores si existen
+                if (is_array($imagenesExistentes)) {
+                    foreach ($imagenesExistentes as $oldImage) {
+                        if ($oldImage) {
+                            Storage::disk('public')->delete($oldImage);
+                        }
+                    }
                 }
             }
-            
+
+            // Guardar nuevas imágenes
             $additionalImages = [];
             foreach ($request->file('imagenes_adicionales') as $image) {
                 $additionalImages[] = $image->store('productos/additional', 'public');
             }
-            $validated['imagenes_adicionales'] = $additionalImages;
+
+            // Convertir a JSON si no usas $casts en el modelo
+            $validated['imagenes_adicionales'] = json_encode($additionalImages);
         }
 
         $producto->update($validated);
 
         return redirect()->route('productos.index')
-                         ->with('success', 'Producto actualizado exitosamente.');
+            ->with('success', 'Producto actualizado exitosamente.');
     }
 
     public function destroy($id)
     {
         $producto = Producto::findOrFail($id);
 
-        // Eliminar imágenes asociadas
+        // Eliminar imagen principal
         if ($producto->imagen_principal) {
             Storage::disk('public')->delete($producto->imagen_principal);
         }
-        
+
+        // Eliminar imágenes adicionales (manejo seguro para JSON o array)
         if ($producto->imagenes_adicionales) {
-            foreach ($producto->imagenes_adicionales as $image) {
-                Storage::disk('public')->delete($image);
+            // Si es un JSON string, decodificarlo a array
+            $imagenesAdicionales = is_string($producto->imagenes_adicionales)
+                ? json_decode($producto->imagenes_adicionales, true)
+                : $producto->imagenes_adicionales;
+
+            // Verificar que sea iterable antes del foreach
+            if (is_iterable($imagenesAdicionales)) {
+                foreach ($imagenesAdicionales as $image) {
+                    if ($image) { // Verificar que no sea null o vacío
+                        Storage::disk('public')->delete($image);
+                    }
+                }
             }
         }
 
         $producto->delete();
 
         return redirect()->route('productos.index')
-                         ->with('success', 'Producto eliminado exitosamente.');
+            ->with('success', 'Producto eliminado exitosamente.');
     }
 }

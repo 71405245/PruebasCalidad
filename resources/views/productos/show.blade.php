@@ -27,10 +27,9 @@
             <div class="col-md-5">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        @if($producto->imagen_principal)
-                            <img src="{{ asset('storage/' . $producto->imagen_principal) }}" 
-                                 class="img-fluid rounded mb-3" 
-                                 alt="{{ $producto->nombre }}">
+                        @if ($producto->imagen_principal)
+                            <img src="{{ asset('storage/' . $producto->imagen_principal) }}" class="img-fluid rounded mb-3"
+                                alt="{{ $producto->nombre }}">
                         @else
                             <div class="bg-light p-5 text-center text-muted rounded">
                                 <i class="bi bi-image fs-1"></i>
@@ -38,15 +37,25 @@
                             </div>
                         @endif
 
-                        @if($producto->imagenes_adicionales && count($producto->imagenes_adicionales) > 0)
-                            <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
-                                @foreach($producto->imagenes_adicionales as $image)
-                                    <img src="{{ asset('storage/' . $image) }}" 
-                                         class="img-thumbnail" 
-                                         width="80" 
-                                         alt="Imagen adicional del producto">
-                                @endforeach
-                            </div>
+                        @if ($producto->imagenes_adicionales)
+                            @php
+                                // Convertir JSON a array si es necesario
+                                $imagenesAdicionales = is_string($producto->imagenes_adicionales)
+                                    ? json_decode($producto->imagenes_adicionales, true)
+                                    : $producto->imagenes_adicionales;
+                            @endphp
+
+                            @if (is_array($imagenesAdicionales) && count($imagenesAdicionales) > 0)
+                                <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+                                    @foreach ($imagenesAdicionales as $image)
+                                        @if ($image)
+                                            {{-- Verificar que la imagen no sea null --}}
+                                            <img src="{{ asset('storage/' . $image) }}" class="img-thumbnail" width="80"
+                                                alt="Imagen adicional del producto">
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -62,8 +71,10 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <p class="mb-1"><strong>SKU:</strong> {{ $producto->sku ?? 'N/A' }}</p>
-                                <p class="mb-1"><strong>Código de barras:</strong> {{ $producto->codigo_barras ?? 'N/A' }}</p>
-                                <p class="mb-1"><strong>Categoría:</strong> {{ $producto->categoria->nombre ?? 'N/A' }}</p>
+                                <p class="mb-1"><strong>Código de barras:</strong> {{ $producto->codigo_barras ?? 'N/A' }}
+                                </p>
+                                <p class="mb-1"><strong>Categoría:</strong> {{ $producto->categoria->nombre ?? 'N/A' }}
+                                </p>
                                 <p class="mb-1"><strong>Marca:</strong> {{ $producto->marca->nombre ?? 'N/A' }}</p>
                             </div>
                             <div class="col-md-6">
@@ -86,9 +97,11 @@
                                 <div class="card bg-light">
                                     <div class="card-body text-center">
                                         <h6 class="card-subtitle mb-2 text-muted">Precio</h6>
-                                        @if($producto->precio_descuento)
-                                            <h4 class="text-danger fw-bold">${{ number_format($producto->precio_descuento, 2) }}</h4>
-                                            <small class="text-decoration-line-through text-muted">${{ number_format($producto->precio, 2) }}</small>
+                                        @if ($producto->precio_descuento)
+                                            <h4 class="text-danger fw-bold">
+                                                ${{ number_format($producto->precio_descuento, 2) }}</h4>
+                                            <small
+                                                class="text-decoration-line-through text-muted">${{ number_format($producto->precio, 2) }}</small>
                                         @else
                                             <h4 class="fw-bold">${{ number_format($producto->precio, 2) }}</h4>
                                         @endif
@@ -111,13 +124,13 @@
                                     <div class="card-body text-center">
                                         <h6 class="card-subtitle mb-2 text-muted">Estado</h6>
                                         <div>
-                                            @if($producto->es_destacado)
+                                            @if ($producto->es_destacado)
                                                 <span class="badge bg-warning text-dark mb-1">Destacado</span>
                                             @endif
-                                            @if($producto->es_nuevo)
+                                            @if ($producto->es_nuevo)
                                                 <span class="badge bg-info mb-1">Nuevo</span>
                                             @endif
-                                            @if($producto->es_promocion)
+                                            @if ($producto->es_promocion)
                                                 <span class="badge bg-danger mb-1">Promoción</span>
                                             @endif
                                         </div>

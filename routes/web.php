@@ -57,3 +57,4 @@ Route::prefix('admin')->group(function () {
 // Rutas públicas
 Route::get('/categorias/{categoria}', [CategoriaController::class, 'show'])->name('categorias.show');
 Route::get('/marcas/{marca}', [MarcaController::class, 'show'])->name('marcas.show');
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');

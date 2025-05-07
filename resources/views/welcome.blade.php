@@ -10,7 +10,7 @@
         <div class="d-flex justify-content-center gap-4 mt-5">
             <a href="{{ route('ventas.index') }}" class="btn btn-warning text-white fw-bold w-25 py-6 fs-2">Gestión de Ventas</a>
             <a href="{{ route('productos.create') }}"class="btn btn-primary text-white fw-bold w-25 py-6 fs-2">Crear Producto</a>
-            <a href="{{ route('productos.create') }}"class="btn btn-primary text-white fw-bold w-25 py-6 fs-2">Catalogo</a>
+            <a href="{{ route('productos.index') }}"class="btn btn-primary text-white fw-bold w-25 py-6 fs-2">Catalogo</a>
 
         </div>
     </div>
