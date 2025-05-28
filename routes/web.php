@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
 
 // Pestaña de inicio
 Route::get('/', function () {
@@ -58,3 +60,19 @@ Route::prefix('admin')->group(function () {
 Route::get('/categorias/{categoria}', [CategoriaController::class, 'show'])->name('categorias.show');
 Route::get('/marcas/{marca}', [MarcaController::class, 'show'])->name('marcas.show');
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+Route::prefix('reportes')->group(function () {
+    Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
+    Route::get('/inventario', [ReportController::class, 'inventoryReport'])->name('reportes.inventario');
+    Route::get('/clientes', [ReportController::class, 'customerReport'])->name('reportes.clientes');
+
+    Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
+    Route::post('/ventas/pdf', [ReportController::class, 'salesReportPdf'])->name('reportes.ventas.pdf');
+    Route::get('/ventas/excel', [ReportController::class, 'salesReportExcel'])->name('reportes.ventas.excel');
+
+    Route::get('/inventario', [ReportController::class, 'inventoryReport'])->name('reportes.inventario');
+    Route::get('/clientes', [ReportController::class, 'customerReport'])->name('reportes.clientes');
+});
