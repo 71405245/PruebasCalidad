@@ -40,6 +40,11 @@
                             <i class="fas fa-users me-2"></i> Reporte de Clientes
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item fs-3 py-3" href="{{ route('reportes.dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Panel Analítico
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

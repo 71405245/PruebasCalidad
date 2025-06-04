@@ -32,6 +32,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        @include('reports.partials.ai-assistant', ['reportContext' => 'inventory'])
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

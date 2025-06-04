@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\VentaController;
@@ -9,10 +10,11 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AIController;
 
 // Pestaña de inicio
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Rutas de autenticación (si las necesitas)
@@ -68,6 +70,7 @@ Route::prefix('reportes')->group(function () {
     Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
     Route::get('/inventario', [ReportController::class, 'inventoryReport'])->name('reportes.inventario');
     Route::get('/clientes', [ReportController::class, 'customerReport'])->name('reportes.clientes');
+    Route::get('/dashboard', [ReportController::class, 'dashboard'])->name('reportes.dashboard');
 
     Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
     Route::post('/ventas/pdf', [ReportController::class, 'salesReportPdf'])->name('reportes.ventas.pdf');
@@ -75,4 +78,34 @@ Route::prefix('reportes')->group(function () {
 
     Route::get('/inventario', [ReportController::class, 'inventoryReport'])->name('reportes.inventario');
     Route::get('/clientes', [ReportController::class, 'customerReport'])->name('reportes.clientes');
+});
+Route::middleware(['auth'])->group(function () {
+    // Otras rutas...
+
+    // Asistente IA
+    Route::post('/ai/query', [AIController::class, 'handleQuery'])->name('ai.assistant.query');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::middleware('auth')->group(function () {
+    // Ruta de perfil (para el error profile.edit)
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::middleware('auth')->group(function () {
+    // Dashboard principal
+    Route::get('/dashboard', [ReportController::class, 'dashboard'])->name('dashboard');
+
+    // Reportes
+    Route::prefix('reports')->group(function () {
+        Route::get('sales', [ReportController::class, 'salesReport'])->name('reports.sales');
+        Route::get('inventory', [ReportController::class, 'inventoryReport'])->name('reports.inventory');
+        Route::get('customers', [ReportController::class, 'customerReport'])->name('reports.customers');
+        Route::get('sales/export/pdf', [ReportController::class, 'exportSalesPdf'])->name('reports.exports.sales-pdf');
+    });
 });

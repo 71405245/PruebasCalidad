@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-danger text-white">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">{{ __('Iniciar Sesión') }}</h4>
                         <img src="{{ asset('storage/logo.jpg') }}" alt="Ssamanth Clothes Shein" height="30">  
@@ -80,7 +80,7 @@
 
                         <!-- Botón de login -->
                         <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary py-2">
+                            <button type="submit" class="btn btn-danger py-2">
                                 <i class="fas fa-sign-in-alt me-2"></i>{{ __('Iniciar Sesión') }}
                             </button>
                         </div>
