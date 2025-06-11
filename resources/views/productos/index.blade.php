@@ -18,7 +18,7 @@
                 <p class="text-muted">Administra todos los productos de tu tienda de ropa</p>
             </div>
             <div class="col-md-6 text-end">
-                <a href="{{ route('productos.create') }}" class="btn btn-primary">
+                <a href="{{ route('productos.create') }}" class="btn btn-danger">
                     <i class="bi bi-plus-circle"></i> Nuevo Producto
                 </a>
             </div>
@@ -68,7 +68,7 @@
                             </select>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2">
+                            <button type="submit" class="btn btn-danger me-2">
                                 <i class="bi bi-funnel"></i> Filtrar
                             </button>
                             <a href="{{ route('productos.index') }}" class="btn btn-outline-secondary">

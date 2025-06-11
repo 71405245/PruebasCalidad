@@ -33,7 +33,7 @@
             </tbody>
         </table>
 
-        @include('reports.partials.ai-assistant', ['reportContext' => 'inventory'])
+        {{-- @include('reports.partials.ai-assistant', ['reportContext' => 'inventory']) --}}
 
     </div>
 

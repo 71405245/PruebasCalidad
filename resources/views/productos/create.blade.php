@@ -29,7 +29,7 @@
                         <button type="reset" class="btn btn-outline-secondary me-md-2">
                             <i class="fas fa-undo me-2"></i> Limpiar
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-danger">
                             <i class="fas fa-save me-2"></i> Guardar Producto
                         </button>
                     </div>

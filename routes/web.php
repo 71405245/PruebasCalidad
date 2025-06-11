@@ -14,7 +14,7 @@ use App\Http\Controllers\AIController;
 
 // Pestaña de inicio
 Route::get('/', function () {
-    return view('auth.login');
+    return view('welcome');
 });
 
 // Rutas de autenticación (si las necesitas)
@@ -107,5 +107,5 @@ Route::middleware('auth')->group(function () {
         Route::get('inventory', [ReportController::class, 'inventoryReport'])->name('reports.inventory');
         Route::get('customers', [ReportController::class, 'customerReport'])->name('reports.customers');
         Route::get('sales/export/pdf', [ReportController::class, 'exportSalesPdf'])->name('reports.exports.sales-pdf');
-    });
+});
 });

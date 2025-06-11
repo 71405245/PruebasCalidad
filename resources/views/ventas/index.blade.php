@@ -7,8 +7,8 @@
             
             <!-- Filtros y búsqueda -->
             <div class="d-flex">
-                <input type="text" id="searchInput" class="form-control me-2" placeholder="Buscar ventas..." style="width: 250px;">
-                <a href="{{ route('ventas.create') }}" class="btn btn-success btn-lg">
+                <input type="text" id="searchInput" class="form-danger me-2" placeholder="Buscar ventas..." style="width: 250px;">
+                <a href="{{ route('ventas.create') }}" class="btn btn-danger btn-lg">
                     <i class="bi bi-plus-circle"></i> Nueva Venta
                 </a>
             </div>

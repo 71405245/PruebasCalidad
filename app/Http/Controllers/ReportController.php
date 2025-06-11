@@ -36,7 +36,7 @@ class ReportController extends Controller
         $totalProductos = Producto::count();
         $clientesNuevos = Venta::distinct('nombre_cliente', 'apellido_cliente')->count();
 
-        return view('dashboard', compact(
+        return view('reports.dashboard', compact(
             'grafico_labels',
             'grafico_data',
             'ventasRecientes',

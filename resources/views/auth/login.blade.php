@@ -1,100 +1,88 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-danger text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0">{{ __('Iniciar Sesión') }}</h4>
-                        <img src="{{ asset('storage/logo.jpg') }}" alt="Ssamanth Clothes Shein" height="30">  
-                    </div>
+<div class="min-vh-100 d-flex">
+    <!-- Columna izquierda -->
+    <div class="col-md-6 d-none d-md-flex bg-danger text-white flex-column justify-content-center align-items-center p-5">
+        <img src="{{ asset('storage/logo.jpg') }}" alt="Logo" height="80" class="mb-4 rounded">
+        <h1 class="fw-bold mb-3">Ssamanth Clothes</h1>
+        <p class="lead text-center px-4">
+            Sistema de gestión de ventas e inventario. Optimiza tu negocio con tecnología moderna.
+        </p>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+        <div class="card shadow-sm border-0 rounded-4 p-4" style="width: 100%; max-width: 420px;">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h5 class="fw-bold text-dark mb-1">Bienvenido</h5>
+                    <small class="text-muted">Ingresa a tu cuenta</small>
                 </div>
 
-                <div class="card-body p-4">
-                    <!-- Login con Google -->
-                    <div class="text-center mb-4">
-                        <a href="{{ route('login.google') }}" class="btn btn-outline-danger rounded-pill d-flex align-items-center justify-content-center">
-                            <img src="https://img.freepik.com/vector-premium/logotipo-google_798572-207.jpg?ga=GA1.1.584119874.1748414002&semt=ais_hybrid&w=740" alt="Google" width="20" class="me-2">
-                            {{ __('Continuar con Google') }}
-                        </a>
-                        <div class="my-3 position-relative">
-                            <hr>
-                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted">o</span>
-                        </div>
+                <!-- Botón Google -->
+                <div class="d-grid mb-3">
+                    <a href="{{ route('login.google') }}" class="btn btn-outline-dark rounded-pill d-flex align-items-center justify-content-center gap-2">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" width="20">
+                        <span class="fw-semibold">Continuar con Google</span>
+                    </a>
+                </div>
+
+                <div class="text-center my-3">
+                    <span class="text-muted small">o usa tu correo y contraseña</span>
+                </div>
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <!-- Email -->
+                    <div class="form-floating mb-3">
+                        <input id="email" type="email" name="email" value="{{ old('email') }}" required 
+                            class="form-control @error('email') is-invalid @enderror" placeholder="correo@example.com">
+                        <label for="email">Correo Electrónico</label>
+                        @error('email')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                    <!-- Contraseña -->
+                    <div class="form-floating mb-3 position-relative">
+                        <input id="password" type="password" name="password" required 
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña">
+                        <label for="password">Contraseña</label>
+                        <button type="button" class="btn btn-sm btn-light position-absolute end-0 top-50 translate-middle-y me-2 toggle-password" style="z-index: 2;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        @error('password')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">{{ __('Correo Electrónico') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
-                                       name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
-                                       placeholder="tu@email.com">
-                            </div>
-                            @error('email')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
+                    <!-- Recordar y olvidar -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                                {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label small" for="remember">Recordar sesión</label>
                         </div>
+                        @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a>
+                        @endif
+                    </div>
 
-                        <!-- Contraseña -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">{{ __('Contraseña') }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                                       name="password" required autocomplete="current-password"
-                                       placeholder="••••••••">
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            @error('password')
-                                <div class="invalid-feedback d-block">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @enderror
-                        </div>
+                    <!-- Botón -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-danger rounded-pill py-2 fw-semibold">
+                            <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                        </button>
+                    </div>
 
-                        <!-- Recordar sesión y olvidé contraseña -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Recordar sesión') }}
-                                </label>
-                            </div>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-decoration-none">
-                                    {{ __('¿Olvidaste tu contraseña?') }}
-                                </a>
-                            @endif
-                        </div>
-
-                        <!-- Botón de login -->
-                        <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-danger py-2">
-                                <i class="fas fa-sign-in-alt me-2"></i>{{ __('Iniciar Sesión') }}
-                            </button>
-                        </div>
-
-                        <!-- Enlace a registro -->
-                        <div class="text-center">
-                            <p class="mb-0">{{ __('¿No tienes una cuenta?') }}
-                                <a href="{{ route('register') }}" class="text-decoration-none fw-bold">
-                                    {{ __('Regístrate') }}
-                                </a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Registro -->
+                    <div class="text-center">
+                        <small class="text-muted">¿No tienes una cuenta?</small>
+                        <a href="{{ route('register') }}" class="text-decoration-none fw-bold ms-1">Regístrate</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -103,10 +91,9 @@
 @push('scripts')
 <script>
     document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.closest('.input-group').querySelector('input');
+        button.addEventListener('click', function () {
+            const input = this.closest('.form-floating').querySelector('input');
             const icon = this.querySelector('i');
-            
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.classList.replace('fa-eye', 'fa-eye-slash');

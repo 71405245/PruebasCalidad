@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Reporte de Clientes')
@@ -19,20 +20,13 @@
             <tbody>
                 @foreach ($clientes as $cliente)
                     <tr>
-                        <td>{{ $cliente['nombre_completo'] }}</td>
-                        <td>{{ $cliente['ventas_count'] }}</td>
-                        <td>
-                            @if (!empty($cliente['ultima_compra']))
-                                {{ \Carbon\Carbon::parse($cliente['ultima_compra'])->format('d/m/Y') }}
-                            @else
-                                N/A
-                            @endif
-                        </td>
+                        <td>{{ $cliente->nombre_cliente }} {{ $cliente->apellido_cliente }}</td>
+                        <td>{{ $cliente->ventas_count }}</td>
+                        <td>{{ optional($cliente->ultima_venta)->created_at->format('d/m/Y') ?? 'N/A' }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-        @include('reports.partials.ai-assistant', ['reportContext' => 'customers'])
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,32 +39,6 @@
                 datasets: [{
                     label: 'Compras Realizadas',
                     data: {!! json_encode($clientes->pluck('ventas_count')) !!},
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-    <script>
-        const clientesChart = document.getElementById('clientesChart').getContext('2d');
-        const nombresClientes = {!! json_encode(array_column($clientes, 'nombre_completo')) !!};
-        const ventasCounts = {!! json_encode(array_column($clientes, 'ventas_count')) !!};
-
-        const chart = new Chart(clientesChart, {
-            type: 'bar',
-            data: {
-                labels: nombresClientes,
-                datasets: [{
-                    label: 'Compras Realizadas',
-                    data: ventasCounts,
                     backgroundColor: 'rgba(255, 99, 132, 0.6)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
