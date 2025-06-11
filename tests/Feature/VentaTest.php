@@ -4,22 +4,19 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Venta;
+use App\Models\User;
 
 class VentaTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_creacion_venta()
+    public function test_usuario_autenticado_puede_ver_lista_de_ventas()
     {
-        $venta = Venta::create([
-            'cliente' => 'Jordan Quispe',
-            'fecha' => now(),
-            'total' => 150.00
-        ]);
+        $user = User::factory()->create();
 
-        $this->assertDatabaseHas('ventas', [
-            'cliente' => 'Jordan Quispe'
-        ]);
+        $response = $this->actingAs($user)->get('/ventas');
+
+        $response->assertStatus(200);
+        $response->assertSee('Ventas'); // Asegúrate de que tu vista contenga esta palabra
     }
 }

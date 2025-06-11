@@ -95,6 +95,26 @@ Route::middleware('auth')->group(function () {
     // Ruta de perfil (para el error profile.edit)
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+    Route::middleware('auth')->group(function () {
+    Route::resource('ventas', VentaController::class);
+    Route::get('ventas/{id}/voucher', [VentaController::class, 'generateVoucher'])->name('ventas.voucher');
+    Route::get('ventas/reporte/diario', [VentaController::class, 'dailyReport'])->name('ventas.reporte.diario');
+    Route::get('ventas/reporte/mensual', [VentaController::class, 'monthlyReport'])->name('ventas.reporte.mensual');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('reportes')->group(function () {
+        Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
+        Route::post('/ventas/pdf', [ReportController::class, 'salesReportPdf'])->name('reportes.ventas.pdf');
+        Route::get('/ventas/excel', [ReportController::class, 'salesReportExcel'])->name('reportes.ventas.excel');
+        Route::get('/inventario', [ReportController::class, 'inventoryReport'])->name('reportes.inventario');
+        Route::get('/clientes', [ReportController::class, 'customerReport'])->name('reportes.clientes');
+        Route::get('/dashboard', [ReportController::class, 'dashboard'])->name('reportes.dashboard');
+    });
+});
+
+
 });
 
 Route::middleware('auth')->group(function () {
