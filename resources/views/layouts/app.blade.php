@@ -27,7 +27,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Vite Assets -->
+    <!-- Vite Assets a-->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     @stack('styles')
