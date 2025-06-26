@@ -9,8 +9,8 @@
             </button>
         </div>
         <div class="card-body ai-assistant-body" style="display: none;">
-            <!-- Contenido del chat -->
             <div id="ai-chat-container" style="height: 300px; overflow-y: auto; margin-bottom: 15px;"></div>
+
             <form class="ai-assistant-form">
                 @csrf
                 <input type="hidden" name="report_context" value="{{ $reportContext ?? '' }}">
@@ -22,6 +22,35 @@
                     </button>
                 </div>
             </form>
+            <!-- Dentro del .card-body o al final del chat container -->
+            <div id="n8n-chat-placeholder"></div>
+            <button class="btn btn-secondary mt-2" onclick="loadN8NChat()">Abrir Chat n8n</button>
+
+            <script>
+                function loadN8NChat() {
+                    const script = document.createElement('script');
+                    script.type = 'module';
+                    script.innerHTML = `
+                    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+                    createChat({
+                        webhookUrl: '${{ env('AI_ENDPOINT') }}', // ⚠️ Esto debe resolverse con Blade si es PHP
+                        defaultLanguage: 'es',
+                        initialMessages: ['Hola', '¿En qué puedo ayudarte hoy?'],
+                        i18n: {
+                        es: {
+                            title: 'Hola!',
+                            subtitle: 'Comienza un chat',
+                            footer: '',
+                            getStarted: 'Nueva conversación',
+                            inputPlaceholder: 'Pregúntame lo que quieras',
+                        },
+                        },
+                    });
+                    `;
+                    document.body.appendChild(script);
+                }
+            </script>
+
         </div>
     </div>
 </div>
@@ -29,7 +58,6 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Alternar visibilidad
             document.querySelectorAll('.toggle-ai-assistant').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const body = this.closest('.card').querySelector('.ai-assistant-body');
@@ -40,47 +68,50 @@
                 });
             });
 
-            // Enviar pregunta
             document.querySelectorAll('.ai-assistant-form').forEach(form => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const container = this.closest('.ai-assistant-container');
-                    const question = container.querySelector('.ai-question-input').value.trim();
+                    const input = container.querySelector('.ai-question-input');
+                    const question = input.value.trim();
                     const context = container.querySelector('input[name="report_context"]').value;
 
-                    if (question) {
-                        addAIMessage(container, question, 'user');
-                        container.querySelector('.ai-question-input').value = '';
-
-                        // Mostrar indicador de carga
-                        addAIMessage(container, 'Procesando tu pregunta...', 'bot', true);
-
-                        // Enviar al servidor
-                        fetch('{{ route('ai.assistant.query') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                body: JSON.stringify({
-                                    question: question,
-                                    context: context
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                container.querySelector('.typing-indicator')?.remove();
-                                if (data.success) {
-                                    addAIMessage(container, data.answer, 'bot');
-                                } else {
-                                    addAIMessage(container, 'Error: ' + data.message, 'bot');
-                                }
-                            })
-                            .catch(error => {
-                                container.querySelector('.typing-indicator')?.remove();
-                                addAIMessage(container, 'Error de conexión', 'bot');
-                            });
+                    if (!question) {
+                        input.classList.add('is-invalid');
+                        return;
+                    } else {
+                        input.classList.remove('is-invalid');
                     }
+
+                    addAIMessage(container, question, 'user');
+                    input.value = '';
+
+                    addAIMessage(container, 'Procesando tu pregunta...', 'bot', true);
+
+                    fetch("{{ route('ai.assistant.query') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                question: question,
+                                context: context
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            container.querySelector('.typing-indicator')?.remove();
+                            if (data.success) {
+                                addAIMessage(container, data.answer, 'bot');
+                            } else {
+                                addAIMessage(container, 'Error: ' + data.message, 'bot');
+                            }
+                        })
+                        .catch(() => {
+                            container.querySelector('.typing-indicator')?.remove();
+                            addAIMessage(container, 'Error de conexión', 'bot');
+                        });
                 });
             });
 
@@ -95,15 +126,12 @@
                 if (isTyping) {
                     message.className = 'typing-indicator mb-2 text-start';
                     message.innerHTML = `
-                <div class="d-inline-block p-2 rounded-3 bg-light">
-                    <div class="typing-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="d-inline-block p-2 rounded-3 bg-light">
+                        <div class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </div>
                     </div>
-                </div>
-                <small class="text-muted">${time}</small>
-            `;
+                    <small class="text-muted">${time}</small>`;
                 } else {
                     const bubbleClass = sender === 'user' ? 'bg-primary text-white' : 'bg-light';
                     const icon = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
@@ -111,15 +139,12 @@
 
                     message.className = `mb-2 ${alignClass}`;
                     message.innerHTML = `
-                <div class="d-inline-flex align-items-end">
-                    ${sender === 'bot' ? `<i class="${icon} me-2 mb-1"></i>` : ''}
-                    <div class="p-2 rounded-3 ${bubbleClass}">
-                        ${text}
+                    <div class="d-inline-flex align-items-end">
+                        ${sender === 'bot' ? `<i class="${icon} me-2 mb-1"></i>` : ''}
+                        <div class="p-2 rounded-3 ${bubbleClass}">${text}</div>
+                        ${sender === 'user' ? `<i class="${icon} ms-2 mb-1"></i>` : ''}
                     </div>
-                    ${sender === 'user' ? `<i class="${icon} ms-2 mb-1"></i>` : ''}
-                </div>
-                <small class="text-muted d-block" style="font-size: 0.7rem;">${time}</small>
-            `;
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">${time}</small>`;
                 }
 
                 chatContainer.appendChild(message);
@@ -135,17 +160,12 @@
             right: 20px;
             width: 350px;
             z-index: 1000;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             border-radius: 0.5rem;
             overflow: hidden;
         }
 
         .ai-assistant-container .card-header {
             cursor: pointer;
-        }
-
-        .ai-assistant-body {
-            padding: 15px;
         }
 
         #ai-chat-container {

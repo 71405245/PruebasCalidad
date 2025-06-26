@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CapacitacionController;
+use App\Http\Controllers\EmpleadoCapacitacionController;
 
 // Pestaña de inicio
 Route::get('/', function () {
@@ -63,8 +66,14 @@ Route::get('/categorias/{categoria}', [CategoriaController::class, 'show'])->nam
 Route::get('/marcas/{marca}', [MarcaController::class, 'show'])->name('marcas.show');
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+// ==================== AUTENTICACIÓN ====================
+Auth::routes();
+
+// Autenticación con Google
+Route::prefix('auth')->group(function () {
+    Route::get('/google', [AuthController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
+});
 
 Route::prefix('reportes')->group(function () {
     Route::get('/ventas', [ReportController::class, 'salesReport'])->name('reportes.ventas');
@@ -119,13 +128,38 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     // Dashboard principal
-    Route::get('/dashboard', [ReportController::class, 'dashboard'])->name('dashboard');
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/export-pdf', [DashboardController::class, 'exportPdf'])->name('dashboard.export.pdf');
     // Reportes
     Route::prefix('reports')->group(function () {
         Route::get('sales', [ReportController::class, 'salesReport'])->name('reports.sales');
         Route::get('inventory', [ReportController::class, 'inventoryReport'])->name('reports.inventory');
         Route::get('customers', [ReportController::class, 'customerReport'])->name('reports.customers');
         Route::get('sales/export/pdf', [ReportController::class, 'exportSalesPdf'])->name('reports.exports.sales-pdf');
+<<<<<<< HEAD
 });
+=======
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
+>>>>>>> 2350b95 (código 7)
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Capacitaciones
+    // Opción 1: Usar Route::resource (recomendado para CRUD completo)
+    Route::resource('capacitaciones', \App\Http\Controllers\CapacitacionController::class);
+
+    // O Opción 2: Definir manualmente la ruta create
+    Route::get('/capacitaciones/create', [\App\Http\Controllers\CapacitacionController::class, 'create'])
+        ->name('capacitaciones.create');
+    Route::get('capacitaciones/{capacitacione}/edit', [CapacitacionController::class, 'edit'])
+        ->name('capacitaciones.edit');
+
+    Route::get('empleados/{empleado}/capacitaciones', [EmpleadoCapacitacionController::class, 'index'])
+        ->name('empleados.capacitaciones');
+    Route::post('empleados/{empleado}/capacitaciones', [EmpleadoCapacitacionController::class, 'store']);
+
+    // Progreso de capacitaciones
+    Route::put('capacitaciones/{capacitacion}/progreso', [EmpleadoCapacitacionController::class, 'updateProgreso'])
+        ->name('capacitaciones.progreso');
 });

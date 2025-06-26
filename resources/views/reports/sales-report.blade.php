@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 
+=======
+sales-report.blade.php:
+>>>>>>> 2350b95 (código 7)
 @extends('layouts.app')
 
 @section('title', 'Reporte de Ventas')
