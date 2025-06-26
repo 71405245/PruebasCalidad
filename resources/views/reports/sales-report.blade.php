@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+sales-report.blade.php:
+>>>>>>> 2350b95 (código 7)
 =======
 sales-report.blade.php:
 >>>>>>> 2350b95 (código 7)

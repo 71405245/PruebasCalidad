@@ -4,6 +4,7 @@
 
 @section('content')
 <<<<<<< HEAD
+<<<<<<< HEAD
     <div class="container mt-4">
         <h1 class="mb-4">📦 Reporte de Inventario</h1>
 
@@ -37,6 +38,8 @@
         {{-- @include('reports.partials.ai-assistant', ['reportContext' => 'inventory']) --}}
 
 =======
+=======
+>>>>>>> 2350b95 (código 7)
     <!-- Hero Section -->
     <div class="hero-section bg-gradient-primary text-white py-5 mb-4">
         <div class="container">
@@ -73,6 +76,9 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
     </div>
 

@@ -137,7 +137,32 @@ Route::middleware('auth')->group(function () {
         Route::get('customers', [ReportController::class, 'customerReport'])->name('reports.customers');
         Route::get('sales/export/pdf', [ReportController::class, 'exportSalesPdf'])->name('reports.exports.sales-pdf');
 <<<<<<< HEAD
+<<<<<<< HEAD
 });
+=======
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
+>>>>>>> 2350b95 (código 7)
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Capacitaciones
+    // Opción 1: Usar Route::resource (recomendado para CRUD completo)
+    Route::resource('capacitaciones', \App\Http\Controllers\CapacitacionController::class);
+
+    // O Opción 2: Definir manualmente la ruta create
+    Route::get('/capacitaciones/create', [\App\Http\Controllers\CapacitacionController::class, 'create'])
+        ->name('capacitaciones.create');
+    Route::get('capacitaciones/{capacitacione}/edit', [CapacitacionController::class, 'edit'])
+        ->name('capacitaciones.edit');
+
+    Route::get('empleados/{empleado}/capacitaciones', [EmpleadoCapacitacionController::class, 'index'])
+        ->name('empleados.capacitaciones');
+    Route::post('empleados/{empleado}/capacitaciones', [EmpleadoCapacitacionController::class, 'store']);
+
+    // Progreso de capacitaciones
+    Route::put('capacitaciones/{capacitacion}/progreso', [EmpleadoCapacitacionController::class, 'updateProgreso'])
+        ->name('capacitaciones.progreso');
 =======
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });

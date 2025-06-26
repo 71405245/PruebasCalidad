@@ -378,6 +378,7 @@
         </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         <table class="table table-bordered mt-4">
             <thead class="table-dark">
                 <tr>
@@ -618,6 +619,202 @@
             </div>
         </div>
     </div>
+=======
+        <!-- KPI Cards -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="kpi-card fade-in-up" style="animation-delay: 0.1s">
+                    <div class="kpi-icon" style="background: var(--primary-gradient)">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" id="totalClientes">{{ $clientes->count() }}</h3>
+                    <p class="text-muted mb-0">Total Clientes</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="kpi-card fade-in-up" style="animation-delay: 0.2s">
+                    <div class="kpi-icon" style="background: var(--success-gradient)">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" id="clientesVip">{{ $clientes->where('ventas_count', '>=', 5)->count() }}</h3>
+                    <p class="text-muted mb-0">Clientes VIP</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="kpi-card fade-in-up" style="animation-delay: 0.3s">
+                    <div class="kpi-icon" style="background: var(--warning-gradient)">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" id="promedioCompras">{{ number_format($clientes->avg('ventas_count'), 1) }}
+                    </h3>
+                    <p class="text-muted mb-0">Promedio Compras</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="kpi-card fade-in-up" style="animation-delay: 0.4s">
+                    <div class="kpi-icon" style="background: var(--danger-gradient)">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1" id="clientesActivos">{{ $clientes->whereNotNull('ultima_venta')->count() }}
+                    </h3>
+                    <p class="text-muted mb-0">Clientes Activos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row mb-4">
+            <div class="col-xl-8 mb-4">
+                <div class="chart-container fade-in-up" style="animation-delay: 0.5s">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">
+                            <i class="fas fa-chart-bar text-primary me-2"></i>Análisis de Compras por Cliente
+                        </h5>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary btn-sm active"
+                                data-chart="bar">Barras</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-chart="line">Líneas</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="clientesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 mb-4">
+                <div class="chart-container fade-in-up" style="animation-delay: 0.6s">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-chart-pie text-success me-2"></i>Segmentación de Clientes
+                    </h5>
+                    <canvas id="segmentacionChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="fade-in-up" style="animation-delay: 0.7s">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchClientes"
+                    placeholder="Buscar clientes por nombre...">
+            </div>
+
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">
+                    <i class="fas fa-users me-1"></i> Todos
+                </div>
+                <div class="filter-tab" data-filter="vip">
+                    <i class="fas fa-crown me-1"></i> VIP (5+ compras)
+                </div>
+                <div class="filter-tab" data-filter="frequent">
+                    <i class="fas fa-fire me-1"></i> Frecuentes (3-4 compras)
+                </div>
+                <div class="filter-tab" data-filter="new">
+                    <i class="fas fa-seedling me-1"></i> Nuevos (1-2 compras)
+                </div>
+                <div class="filter-tab" data-filter="inactive">
+                    <i class="fas fa-clock me-1"></i> Inactivos
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Table -->
+        <div class="fade-in-up" style="animation-delay: 0.8s">
+            <div class="modern-table">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-0 py-3">Cliente</th>
+                            <th class="border-0 py-3">Segmento</th>
+                            <th class="border-0 py-3">Estadísticas</th>
+                            <th class="border-0 py-3">Última Compra</th>
+                            <th class="border-0 py-3">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientesTableBody">
+                        @foreach ($clientes as $cliente)
+                            @php
+                                $segment = 'new';
+                                $segmentClass = 'badge-new';
+                                $segmentText = 'Nuevo';
+
+                                if ($cliente->ventas_count >= 5) {
+                                    $segment = 'vip';
+                                    $segmentClass = 'badge-vip';
+                                    $segmentText = 'VIP';
+                                } elseif ($cliente->ventas_count >= 3) {
+                                    $segment = 'frequent';
+                                    $segmentClass = 'badge-frequent';
+                                    $segmentText = 'Frecuente';
+                                } elseif (!$cliente->ultima_venta) {
+                                    $segment = 'inactive';
+                                    $segmentClass = 'badge-inactive';
+                                    $segmentText = 'Inactivo';
+                                }
+                            @endphp
+                            <tr class="customer-row" data-segment="{{ $segment }}"
+                                data-name="{{ strtolower($cliente->nombre_cliente . ' ' . $cliente->apellido_cliente) }}">
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="customer-avatar">
+                                            {{ substr($cliente->nombre_cliente, 0, 1) }}{{ substr($cliente->apellido_cliente, 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">{{ $cliente->nombre_cliente }}
+                                                {{ $cliente->apellido_cliente }}</div>
+                                            <small class="text-muted">ID: #{{ $cliente->id ?? 'N/A' }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="customer-badge {{ $segmentClass }}">
+                                        {{ $segmentText }}
+                                    </span>
+                                </td>
+                                <td class="py-3">
+                                    <div class="customer-stats">
+                                        <div class="stat-item">
+                                            <div class="stat-value">{{ $cliente->ventas_count }}</div>
+                                            <div class="stat-label">Compras</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value">
+                                                ${{ number_format($cliente->ventas_count * 150, 0) }}</div>
+                                            <div class="stat-label">Total</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    @if ($cliente->ultima_venta)
+                                        <div class="fw-bold">{{ $cliente->ultima_venta->created_at->format('d/m/Y') }}
+                                        </div>
+                                        <small
+                                            class="text-muted">{{ $cliente->ultima_venta->created_at->diffForHumans() }}</small>
+                                    @else
+                                        <span class="text-muted">Sin compras</span>
+                                    @endif
+                                </td>
+                                <td class="py-3">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Ver perfil">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success btn-sm" title="Contactar">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info btn-sm" title="Historial">
+                                            <i class="fas fa-history"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+>>>>>>> 2350b95 (código 7)
 @endsection
 
 @push('scripts')
@@ -972,4 +1169,7 @@
         });
     </script>
 @endpush
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)

@@ -455,6 +455,7 @@
 
 @section('content')
 <<<<<<< HEAD
+<<<<<<< HEAD
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="display-4">Lista de Ventas</h1>
@@ -466,6 +467,8 @@
                     <i class="bi bi-plus-circle"></i> Nueva Venta
                 </a>
 =======
+=======
+>>>>>>> 2350b95 (código 7)
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container">
@@ -485,6 +488,9 @@
                         Nueva Venta
                     </a>
                 </div>
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
             </div>
         </div>

@@ -774,6 +774,7 @@
 
 @section('content')
 <<<<<<< HEAD
+<<<<<<< HEAD
     <div class="container py-4">
         <div class="row mb-4">
             <div class="col-md-6">
@@ -787,6 +788,8 @@
                     <i class="bi bi-plus-circle"></i> Nuevo Producto
                 </a>
 =======
+=======
+>>>>>>> 2350b95 (código 7)
     <!-- Hero Header -->
     <div class="hero-header">
         <div class="container">
@@ -806,6 +809,9 @@
                         Nuevo Producto
                     </a>
                 </div>
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
             </div>
         </div>
@@ -898,6 +904,7 @@
                             </select>
                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <div class="col-md-2 d-flex align-items-end">
                             <button type="submit" class="btn btn-danger me-2">
                                 <i class="bi bi-funnel"></i> Filtrar
@@ -906,6 +913,8 @@
                                 <i class="bi bi-arrow-counterclockwise"></i>
                             </a>
 =======
+=======
+>>>>>>> 2350b95 (código 7)
 
                         <div class="col-lg-2 d-flex align-items-end">
                             <div class="d-flex gap-2 w-100">
@@ -918,6 +927,9 @@
                                     <i class="fas fa-undo"></i>
                                 </a>
                             </div>
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
                         </div>
                     </div>

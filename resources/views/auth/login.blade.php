@@ -2,6 +2,7 @@
 
 @section('content')
 <<<<<<< HEAD
+<<<<<<< HEAD
 <div class="min-vh-100 d-flex">
     <!-- Columna izquierda -->
     <div class="col-md-6 d-none d-md-flex bg-danger text-white flex-column justify-content-center align-items-center p-5">
@@ -50,6 +51,13 @@
         <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center p-5 text-white"
             style="background: url('{{ asset('storage/logo.jpg') }}') center center / cover no-repeat, #dc3545;">
 
+=======
+    <div class="min-vh-100 d-flex">
+        <!-- Columna izquierda -->
+        <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center p-5 text-white"
+            style="background: url('{{ asset('storage/logo.jpg') }}') center center / cover no-repeat, #dc3545;">
+
+>>>>>>> 2350b95 (código 7)
             <div style="background-color: rgba(0,0,0,0.5); padding: 2rem; border-radius: 1rem; text-align: center;">
                 <img src="{{ asset('storage/logo.jpg') }}" alt="Logo" height="80" class="mb-4 rounded shadow">
                 <h1 class="fw-bold mb-3">Ssamanth Shein Clothes</h1>
@@ -67,6 +75,22 @@
                     <div class="text-center mb-4">
                         <h5 class="fw-bold text-dark mb-1">Bienvenido</h5>
                         <small class="text-muted">Ingresa a tu cuenta</small>
+<<<<<<< HEAD
+=======
+                    </div>
+
+                    <!-- Botón Google -->
+                    <div class="d-grid mb-3">
+                        <a href="{{ route('login.google') }}"
+                            class="btn btn-outline-dark rounded-pill d-flex align-items-center justify-content-center gap-2">
+                            <img src="storage/Google.png" width="20">
+                            <span class="fw-semibold">Continuar con Google</span>
+                        </a>
+                    </div>
+
+                    <div class="text-center my-3">
+                        <span class="text-muted small">o usa tu correo y contraseña</span>
+>>>>>>> 2350b95 (código 7)
                     </div>
 
                     <!-- Botón Google -->
@@ -182,6 +206,7 @@
     </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @push('scripts')
 <script>
     document.querySelectorAll('.toggle-password').forEach(button => {
@@ -200,6 +225,8 @@
 </script>
 @endpush
 =======
+=======
+>>>>>>> 2350b95 (código 7)
     @push('scripts')
         <script>
             document.querySelectorAll('.toggle-password').forEach(button => {
@@ -217,5 +244,8 @@
             });
         </script>
     @endpush
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
 @endsection

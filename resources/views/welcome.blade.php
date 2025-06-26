@@ -76,6 +76,7 @@
     </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div class="d-flex justify-content-center gap-4 mt-5 flex-wrap">
             <a href="{{ route('ventas.index') }}" class="btn btn-danger text-white fw-bold w-25 py-6 fs-2 shadow rounded-4">
                 <i class="fas fa-cash-register me-2"></i> Gestión de Ventas
@@ -152,6 +153,44 @@
         </div>
     @endif
 
+=======
+    <!-- Quick Stats Section -->
+    @if (isset($stats))
+        <div class="container mb-5">
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stats-card text-center">
+                        <i class="fas fa-shopping-cart text-danger fs-1 mb-2"></i>
+                        <h3 class="fw-bold text-danger">{{ $stats['ventas_hoy'] ?? '0' }}</h3>
+                        <p class="text-muted mb-0">Ventas Hoy</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stats-card text-center">
+                        <i class="fas fa-boxes text-warning fs-1 mb-2"></i>
+                        <h3 class="fw-bold text-warning">{{ $stats['productos_total'] ?? '0' }}</h3>
+                        <p class="text-muted mb-0">Productos</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stats-card text-center">
+                        <i class="fas fa-dollar-sign text-success fs-1 mb-2"></i>
+                        <h3 class="fw-bold text-success">${{ number_format($stats['ingresos_mes'] ?? 0, 2) }}</h3>
+                        <p class="text-muted mb-0">Ingresos del Mes</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stats-card text-center">
+                        <i class="fas fa-users text-info fs-1 mb-2"></i>
+                        <h3 class="fw-bold text-info">{{ $stats['clientes_total'] ?? '0' }}</h3>
+                        <p class="text-muted mb-0">Clientes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+>>>>>>> 2350b95 (código 7)
     <!-- Main Actions Section -->
     <div class="container">
         <div class="row justify-content-center">
@@ -337,6 +376,9 @@
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
+>>>>>>> 2350b95 (código 7)
+=======
 >>>>>>> 2350b95 (código 7)
             </div>
         </div>
